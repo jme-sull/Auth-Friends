@@ -1,42 +1,58 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Switch } from 'react-router-dom';
 import './App.css';
 import { Button } from '@material-ui/core'
+import { axiosWithAuth } from './utils/axiosAuth'
 
 import Login from './componets/Login'
+import FriendsList from './componets/FriendsList'
 
+const initalFriend = [
 
-const initialFormValues = {
-
-  email: '',
-  password: ''
-
+{
+  name: '',
+  age: '',
+  email: ''
 }
+
+]
 
   function App() {
 
-    const [ formValues, setFormValues ] = useState(initialFormValues)
+    const [ friends, setFriends ] = useState(initalFriend)
 
-
-  const onInputChange = evt => {
-    const name = evt.target.name
-    const value = evt.target.value
-
-      setFormValues({
-        ...formValues,
-        [name]: value 
-    })
-  }
+    axiosWithAuth()
+      .get('/api/friends')
+      .then(res => 
+        setFriends(res.data))
+      .catch(err => console.log(err))
 
 
       return (
         <div>
+          <ul>
+            <li>
+              <Link to='/login'>Login</Link>
+            </li>
+            <li>
+              <Link to='/protected'>Protected Page</Link>
+            </li>
+          </ul>
+      <Switch>
+          <Route exact path ='/protected' component={FriendsList}>
+            {
+              friends.map(friend => {
+               return <FriendsList key={friend.id} friend={friend} />
+            })
+            }
             
-          <Route path='/login' component={Login}>
-                <Login onInputChange={onInputChange} formValues={formValues}/>
           </Route>
 
+          <Route path='/login' component={Login}>
+                <Login />
+          </Route>
+    </Switch>
       </div>
       )
     }
