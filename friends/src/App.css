@@ -1,0 +1,14 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30rem;
+  height: 10rem;
+  margin: auto;
+  margin-top: 3%;
+  
+}
+
+.home-button {
+  margin-top: 5%;
+}
