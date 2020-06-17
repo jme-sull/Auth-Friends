@@ -32,7 +32,6 @@ const Login = props => {
 
 
     const login = (e) => {
-        e.preventDefault();
         axiosWithAuth()
             .post('api/login', credentials)
             .then(res => 
